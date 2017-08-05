@@ -142,4 +142,5 @@ urlpatterns = [
     url(r'^rank/(?P<page>\d+)/$', "account.views.user_rank_page", name="user_rank_page"),
     url(r'^rank/$', "account.views.user_rank_page", name="user_rank_page"),
     url(r'^api/avatar/upload/', AvatarUploadAPIView.as_view(), name="avatar_upload_api"),
+
 ]
