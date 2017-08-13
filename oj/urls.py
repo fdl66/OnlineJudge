@@ -25,8 +25,10 @@ from submission.views import (SubmissionAPIView, SubmissionAdminAPIView, Contest
                               SubmissionShareAPIView, SubmissionRejudgeAdminAPIView, OpenAPISubmitCodeAPI)
 from judge_dispatcher.views import AdminJudgeServerAPIView
 from utils.views import SimditorImageUploadAPIView
+from niji import urls as niji_urls
 
 urlpatterns = [
+    url(r'bbs/',include(niji_urls,namespace='niji')),
     url("^$", "account.views.index_page", name="index_page"),
 
     url(r'^admin/$', TemplateView.as_view(template_name="admin/admin.html"), name="admin_spa_page"),

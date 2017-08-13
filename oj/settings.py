@@ -52,6 +52,9 @@ INSTALLED_APPS = (
     'judge_dispatcher',
 
     'rest_framework',
+    'django.contrib.humanize',
+    'crispy_forms',
+    'niji',
 )
 
 if DEBUG:
@@ -178,3 +181,24 @@ TOKEN_BUCKET_DEFAULT_CAPACITY = 50
 
 # 单位:每分钟
 TOKEN_BUCKET_FILL_RATE = 2
+#**********************************niji**********************************#
+
+# Template context_processors
+TEMPLATES[0]['OPTIONS']['context_processors'].append("niji.context_processors.niji_processor")
+
+# Media related settings are required for avatar uploading to function properly
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Form UI Settings
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# Configure where to link to from the Login and Reg buttons in the forum
+#NIJI_LOGIN_URL_NAME = "account:login"
+#NIJI_REG_URL_NAME = "account:reg"
+
+# Site Name
+NIJI_SITE_NAME = "TJUT_OJ_论坛"
+
+
+#**********************************niji**********************************#
