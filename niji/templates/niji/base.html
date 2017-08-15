@@ -68,17 +68,19 @@
 
 <script src="//code.jquery.com/jquery-2.2.0.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<!--
 <script>
     $(document).ready(function(){
         $('#navSearchBtn').click(function(e){
             e.preventDefault();
             var keyword = $('#keywordInput').val();
             if(keyword){
-                window.location = "/search/" + keyword +"/"; // FIXME: Use url tag!
+                window.location = "bbs/search/" + keyword +"/"; // FIXME: Use url tag!
             }
         });
     });
 </script>
+-->
 {% block footer_ext %}{% endblock %}
 </body>
 </html>
