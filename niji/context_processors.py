@@ -7,8 +7,9 @@ from django.conf import settings
 def niji_processor(request):
     nodes = Node.objects.all()
     site_name = _(getattr(settings, 'NIJI_SITE_NAME', ''))
-    niji_login_url_name = getattr(settings, 'NIJI_LOGIN_URL_NAME', 'niji:login')
-    niji_reg_url_name = getattr(settings, 'NIJI_REG_URL_NAME', 'niji:reg')
+    #niji_login_url_name = getattr(settings, 'NIJI_LOGIN_URL_NAME', 'niji:login')
+    niji_login_url_name = getattr(settings, 'NIJI_LOGIN_URL_NAME', 'user_login_page')
+    niji_reg_url_name = getattr(settings, 'NIJI_REG_URL_NAME', 'user_register_page')
     try:
         unread_count = request.user.received_notifications.filter(read=False).count()
     except AttributeError:

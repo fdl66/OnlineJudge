@@ -39,8 +39,7 @@ urlpatterns = [
 
     url(r'^login/$', TemplateView.as_view(template_name="oj/account/login.html"), name="user_login_page"),
     url(r'^logout/$', "account.views.logout", name="user_logout_api"),
-    url(r'^register/$', TemplateView.as_view(template_name="oj/account/register.html"),
-        name="user_register_page"),
+    url(r'^register/$', TemplateView.as_view(template_name="oj/account/register.html"),name="user_register_page"),
     url(r'^change_password/$', TemplateView.as_view(template_name="oj/account/change_password.html"),
         name="user_change_password_page"),
     url(r'^announcement/(?P<announcement_id>\d+)/$', "announcement.views.announcement_page",
