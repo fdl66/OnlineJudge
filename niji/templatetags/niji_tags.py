@@ -25,7 +25,7 @@ def gravatar_url(user, size=48):
 
     return escape(avatar_url)
 
-
+'''
 @register.simple_tag
 def avatar_url(user, size=48, no_gravatar=False):
     try:
@@ -38,6 +38,10 @@ def avatar_url(user, size=48, no_gravatar=False):
         else:
             return avatar.image.url
 
+'''
+@register.simple_tag
+def avatar_url(user, size=48, no_gravatar=False):
+    return user.userprofile.avatar
 
 @register.simple_tag
 def change_url(request, kwargs=None, query=None):
