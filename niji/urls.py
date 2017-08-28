@@ -8,6 +8,8 @@ from . import views
 api_router = routers.DefaultRouter()
 api_router.register(r'topics', api.TopicApiView)
 api_router.register(r'post', api.PostApiView)
+#不要开放该API，非常不安全！！！
+#api_router.register(r'node', api.NodeApiView)
 
 urlpatterns = [
     url(r'^page/(?P<page>[0-9]+)/$', views.Index.as_view(), name='index'),
@@ -30,5 +32,7 @@ urlpatterns = [
     url(r'^t/create/$', views.create_topic, name='create_topic'),
     url(r'^notifications/$', views.NotificationView.as_view(), name='notifications'),
     url(r'^avatar/$', views.upload_avatar, name="upload_avatar"),
+    url(r'^api/admin/node/$',views.NodeAdminAPIView.as_view(),name='node_admin_api'),
     url(r'^api/', include(api_router.urls)),
+    url(r'^api/admin/topic/$',views.TopicAdminAPIView.as_view(),name='topic_admin_api'),
 ]

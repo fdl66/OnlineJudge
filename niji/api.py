@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
-from niji.models import Topic, Post
-from niji.serializers import TopicSerializer, PostSerializer
+from niji.models import Topic, Post, Node
+from niji.serializers import TopicSerializer, PostSerializer#, NodeSerializer
 
 
 class SessionAuthenticationExemptCSRF(SessionAuthentication):
@@ -20,3 +20,11 @@ class PostApiView(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthenticationExemptCSRF,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+'''
+class NodeApiView(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthenticationExemptCSRF,)
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+
+'''

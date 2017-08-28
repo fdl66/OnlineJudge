@@ -46,6 +46,11 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "bootstrap"], function ($, 
                 name: "小组管理",
                 children: [{name: "小组列表", hash: "#group/group"},
                     {name: "加入小组请求", hash: "#group/join_group_request_list"}]
+            },
+            {
+                name: "论坛管理",
+                children: [{name: "话题编辑", hash: "#niji/nodes"},
+                    {name: "帖子管理", hash: "#niji/topics"}]
             }
         ];
 
@@ -63,6 +68,11 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "bootstrap"], function ($, 
                 name: "小组管理",
                 children: [{name: "小组列表", hash: "#group/group"},
                     {name: "加入小组请求", hash: "#group/join_group_request_list"}]
+            },
+            {
+                name: "论坛管理",
+                children: [{name: "话题编辑", hash: "#niji/nodes"},
+                    {name: "帖子管理", hash: "#niji/topics"}]
             }
         ];
 

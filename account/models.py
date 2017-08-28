@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
-
+    
     class Meta:
         db_table = "user"
 

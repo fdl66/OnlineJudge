@@ -14,6 +14,18 @@ from .models import Topic, Node, Post, Notification, ForumAvatar
 from .forms import TopicForm, TopicEditForm, AppendixForm, ForumAvatarForm, ReplyForm
 from .misc import get_query
 import re
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from account.decorators import admin_required
+from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer
+from utils.shortcuts import (serializer_invalid_response, error_response,
+                             success_response, error_page, paginate, rand_str)
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
 
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 User = get_user_model()
@@ -361,3 +373,67 @@ def reg_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("niji:index"))
+
+class NodeAdminAPIView(APIView):
+
+    @admin_required
+    def put(self, request):
+        serializer = NodeSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.data
+            print data
+            if data["id"] == 0:#添加
+                try:
+                    node = Node.objects.get(title=data["title"])
+                    return error_response(u"该话题已存在！")
+                except Node.DoesNotExist:
+                    node=Node()
+                    pass
+
+            else :#修改
+                try:
+                    node = Node.objects.get(title=data["title"])
+                    if node.id != data["id"]:
+                        return error_response(u"话题已存在")
+                    else :
+                        node = Node.objects.get(id=data["id"])
+                except Node.DoesNotExist:
+                    node = Node.objects.get(id=data["id"])
+                    pass
+            node.title = data["title"]
+            node.description = data["description"]
+            node.save()
+            return success_response(NodeSerializer(node).data)
+        else :
+            return serializer_invalid_response(serializer)
+
+    @admin_required
+    def get(self, request):
+        node = Node.objects.all().order_by('id')
+        keyword = request.GET.get("keyword", None)
+        if keyword:
+            node = node.filter(Q(title__contains=keyword) |
+                              Q(description__contains=keyword))
+        for item in node:
+            topics = Topic.objects.filter(node=item)
+            item.num_of_topics= "{}({})".format(topics.count(), topics.visible().count())
+        return paginate(request, node , EditNodeSerializer)
+
+
+class TopicAdminAPIView(APIView):
+    @admin_required
+    def get(self,request):
+        topics = Topic.objects.all().order_by("order")
+        keyword = request.GET.get("keyword", None)
+        if keyword:
+            topics = Topic.objects.filter(Q(title__contains=keyword))
+            '''
+                                          |Q(content_raw__contain=keyword))
+            user=User.objects.filter(Q(username=keyword))
+            if user:
+                topics+=User.topics.all()
+            '''
+        return paginate(request,topics ,TopicSerializer)
+        #serializer = TopicSerializer(topics,many=True)
+        #return JsonResponse(serializer.data, safe=False)
+    

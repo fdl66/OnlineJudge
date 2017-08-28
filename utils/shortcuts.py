@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator
 
 from rest_framework.response import Response
+from rest_framework.request import Request
 
 
 logger = logging.getLogger("app_info")
@@ -48,11 +49,14 @@ def paginate_data(request, query_set, object_serializer):
     :param query_set 数据库查询结果
     :param object_serializer: 序列化单个object的serializer
     """
+    serializer_context = {
+        'request': Request(request),
+    }
     need_paginate = request.GET.get("paging", None)
     # 如果请求的参数里面没有paging=true的话 就返回全部数据
     if need_paginate != "true":
         if object_serializer:
-            return object_serializer(query_set, many=True).data
+            return object_serializer(instance=query_set,context=serializer_context, many=True).data
         else:
             return query_set
 
@@ -73,7 +77,8 @@ def paginate_data(request, query_set, object_serializer):
     except Exception:
         raise ValueError("Error parameter current_page")
     if object_serializer:
-        results = object_serializer(current_page, many=True).data
+        #results = object_serializer(current_page, many=True).data
+        results = object_serializer(instance=query_set,context=serializer_context, many=True).data
     else:
         results = current_page
 

@@ -198,7 +198,7 @@ class Appendix(models.Model):
 
 @python_2_unicode_compatible
 class Node(models.Model):
-    title = models.CharField(max_length=30, verbose_name=_("title"))
+    title = models.CharField(max_length=30, unique=True,verbose_name=_("title"))
     description = models.TextField(default='', blank=True, verbose_name=_("description"))
 
     def __str__(self):
