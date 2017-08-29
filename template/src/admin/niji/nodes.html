@@ -39,18 +39,19 @@
     <div ms-visible="isEditing">
         <form id="edit-node-form">
             <div class="row">
-
-            <div class="form-group col-md-4"><label>话题名</label>
-                <input name="title" type="text" class="form-control" ms-duplex="title"
-                       data-minlength="1" data-minlength-error="不得少于1位" required>
-                <div class="help-block with-errors"></div>
+                <div class="form-group col-md-6"><label>话题名</label>
+                    <input name="title" type="text" class="form-control" ms-duplex="title"
+                           data-minlength="1" data-minlength-error="不得少于1位" required>
+                    <div class="help-block with-errors"></div>
+                </div>
             </div>
 
-            </div>
-            <div class="row"><label>描述</label>
+            <div class="row">
+                <div class="form-group col-md-12"><label>描述</label>
                     <input name="description" type="text" class="form-control" ms-duplex="description"
                            data-minlength="1" data-minlength-error="不得少于1位" required>
                     <div class="help-block with-errors"></div>
+                </div>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-success">保存</button>
