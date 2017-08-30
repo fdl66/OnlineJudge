@@ -12,6 +12,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
 
                     keyword: "",
 
+                    id:"",
                     title: "",
                     user: "",
                     pub_date: "",
@@ -27,6 +28,12 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                             getPage(page);
                         }
                     },
+
+                    showEditProblemPage: function (problemId) {
+                        avalon.vmodels.admin.problemId = problemId;
+                        avalon.vmodels.admin.template_url = "template/niji/edit_topic.html";
+                    },
+
                     editUser: function (user) {
                         vm.username = user.username;
                         vm.realName = user.real_name;

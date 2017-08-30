@@ -1,8 +1,8 @@
-<div ms-controller="editProblem" class="col-md-9">
-    <form id="edit-problem-form">
+<div ms-controller="edittopic" class="col-md-9">
+    <form id="edit-topic-form">
         <nav>
             <ul class="pager">
-                <li class="previous" ms-click="showProblemListPage()"><a href="javascript:void(0)"><span
+                <li class="previous" ms-click="showTopicListPage()"><a href="javascript:void(0)"><span
                         aria-hidden="true">&larr;</span> 返回</a></li>
             </ul>
         </nav>
@@ -14,10 +14,10 @@
         <div class="row form-group col-md-12">
             <div class="form-group col-md-3">
                 <label>管理</label><br>
-                <label><input type="checkbox" ms-duplex-checked="visible">
+                <label><input type="checkbox" name="hidden">
                     <small> 隐藏&nbsp&nbsp&nbsp&nbsp</small>
                 </label>
-                <label><input type="checkbox" ms-duplex-checked="visible">
+                <label><input type="checkbox" name="closed">
                     <small> 关闭</small>
                 </label>
                 <br><label>标题</label>
@@ -25,16 +25,14 @@
                        data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
                 <div class="help-block with-errors"></div>
                 <label>用户</label>
-                <input type="text" name="title" autofocus class="form-control" ms-duplex="title"
-                       data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
+                <input type="text" name="user_username" class="form-control" ms-duplex="user_username"
+                       data-error="用户名不能为空" maxlength="30" required>
                 <div class="help-block with-errors"></div>
             </div>
             <div class="form-group col-md-9">
                 <label>内容</label>
-                <textarea class="form-control" rows="8" name="input_description"
-                          ms-duplex="inputDescription" data-error="请填写输入描述"
-                          maxlength="10000" required>
-                </textarea>
+                <textarea class="form-control" rows="8" name="content_raw" data-error="请填写输入描述"
+                        ms-duplex="content_raw" maxlength="10000" required></textarea>
                 <div class="help-block with-errors"></div>
             </div>
         </div>
@@ -48,28 +46,57 @@
         <div class="panel panel-default sample-panel">
         <div class="panel-body row">
             <div class="row form-group col-md-12">
-                <div class="row form-group col-md-12">
-                    <div class="form-group col-md-3">
-                        <label>回复处理</label><br>
-                        <label><input type="checkbox" ms-duplex-checked="visible">
-                            <small> 隐藏&nbsp&nbsp&nbsp&nbsp</small>
-                        </label>
-                        <label><input type="checkbox" ms-duplex-checked="visible">
-                            <small> 删除</small>
-                        </label>
-                        <br><br><label>用户</label>
-                        <input type="text" name="title" autofocus class="form-control" ms-duplex="title"
-                               data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
-                        <div class="help-block with-errors"></div>
+                <div class="row right col-md-5">
+                    <div class="right">
+                            <input type="submit" value="搜索" class="btn btn-primary" ms-click="search()">
                     </div>
-                    <div class="form-group col-md-9">
-                        <label>内容</label><br>
-                        <textarea class="form-control" rows="6" name="input_description"
-                                  ms-duplex="inputDescription" data-error="请填写输入描述"
-                                  maxlength="10000" required>
-                        </textarea>
-                        <div class="help-block with-errors"></div>
+                    <div class="right col-md-9">
+                        <input name="keyword" class="form-control" placeholder="请输入关键词" ms-duplex="keyword">
                     </div>
+                </div>
+                <br>
+                <br>
+                <table class="table table-striped">
+                    <tr>
+                        <th>用户</th>
+                        <th>内容</th>
+                        <th>设置</th>
+                    </tr>
+                    <tr ms-repeat="posts">
+                        <td>{{ el.user_username }}</td>
+                        <td>{{ el.content_raw}}</td>
+                        <td>
+                            <button class="btn-sm btn-info" ms-click="editPost(el)">编辑</button>
+                            <a class="btn btn-primary" ms-attr-href="'/submissions/?user_id='+el.id" target="_blank">删除</a>
+                        </td>
+                    </tr>
+                </table>
+                <div class="text-right">
+                    <ms:pager $id="userPager" config="pager"></ms:pager>
+                </div>
+                <div ms-visible="isEditing">
+                    <form id="edit-post-form">
+                        <div class="form-group col-md-3">
+                            <label>回复处理</label><br>
+                            <label><input type="checkbox" name="posts_hidden" ms-duplex-checked="posts_hidden">
+                                <small> 隐藏&nbsp&nbsp&nbsp&nbsp</small>
+                            </label>
+                            <br><br><label>用户</label>
+                            <input type="text" name="posts_user_username"  class="form-control" ms-duplex="posts_user_username"
+                                   data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label>内容</label><br>
+                            <textarea class="form-control" rows="6" name="posts_content_raw"
+                                    ms-duplex="posts_content_raw" data-error="请填写输入描述"
+                                    maxlength="10000" required></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">保存</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -85,8 +112,7 @@
                     <div class="form-group col-md-9">
                         <textarea class="form-control" rows="6" name="input_description"
                                   ms-duplex="inputDescription" data-error="请填写输入描述"
-                                  maxlength="10000" required>
-                        </textarea>
+                                  maxlength="10000" required></textarea>
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group col-md-3">

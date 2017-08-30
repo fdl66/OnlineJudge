@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from account.decorators import admin_required
-from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer
+from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer,PostSerializer
 from utils.shortcuts import (serializer_invalid_response, error_response,
                              success_response, error_page, paginate, rand_str)
 from django.db.models import Q
@@ -433,7 +433,19 @@ class TopicAdminAPIView(APIView):
             if user:
                 topics+=User.topics.all()
             '''
+        topic_id = request.GET.get("topic_id", None)
+        if topic_id:
+            topics=Topic.objects.filter(id=topic_id)
         return paginate(request,topics ,TopicSerializer)
         #serializer = TopicSerializer(topics,many=True)
         #return JsonResponse(serializer.data, safe=False)
-    
+
+class PostAdminAPIView(APIView):
+    @admin_required
+    def get(self,request):
+        posts=Post.objects.all()
+        topic_id=request.GET.get("topic_id",None)
+        if topic_id:
+            posts = Post.objects.filter(topic=topic_id)
+        return paginate(request,posts,PostSerializer)
+

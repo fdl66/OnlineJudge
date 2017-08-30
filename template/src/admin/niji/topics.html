@@ -35,8 +35,9 @@
             <td>{{ el.closed }}</td>
             <td>{{ el.order }}</td>
             <td>
-                <!--<button class="btn-sm btn-info" ms-click="editUser(el)">编辑</button>-->
-                <a class="btn btn-primary" ms-attr-href="'/submissions/?user_id='+el.id" target="_blank">编辑</a>
+                <!--<button class="btn-sm btn-info" ms-click="editUser(el)">编辑</button>
+                <a class="btn btn-primary" ms-attr-href="'/bbs/admin/edittopic/?topic_id='+el.id" target="_blank">编辑</a>-->
+                <button class="btn btn-primary" ms-click="showEditProblemPage(el.id)">编辑</button>
             </td>
         </tr>
     </table>
