@@ -36,7 +36,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                             id:node.id,
                             title: node.title,
                             description: node.description,
-                            dell: true,
+                            dell: 1,
                         };
                         if (confirm("你确定要删除么?")) {
                             $.ajax({
@@ -98,7 +98,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                             id: vm.id,
                             title: vm.title,
                             description: vm.description,
-                            dell: false,
+                            dell: 0,
                         };
                         $.ajax({
                             url: "/bbs/api/admin/node/",

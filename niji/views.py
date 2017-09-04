@@ -380,7 +380,8 @@ class NodeAdminAPIView(APIView):
         serializer = NodeSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.data
-            if data["dell"]:
+            print request.data["dell"]
+            if str(request.data["dell"]) == '1':
                 node=Node.objects.get(id=data["id"])
                 node.delete()
                 return success_response(u"删除成功")

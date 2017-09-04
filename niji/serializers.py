@@ -36,7 +36,6 @@ class NodeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField(max_length=30)
     description = serializers.CharField()
-    dell=serializers.BooleanField()
 
 class EditNodeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
