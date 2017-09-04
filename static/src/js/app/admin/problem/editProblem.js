@@ -1,9 +1,7 @@
 require(["jquery", "avalon", "editor", "uploader", "bsAlert",
         "csrfToken", "tagEditor", "validator", "jqueryUI", "editorComponent", "testCaseUploader", "spj"],
     function ($, avalon, editor, uploader, bsAlert, csrfTokenHeader) {
-
         avalon.ready(function () {
-
             $("#edit-problem-form").validator()
                 .on('submit', function (e) {
                     if (!e.isDefaultPrevented()) {

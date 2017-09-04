@@ -7,21 +7,9 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
             else {
                 var vm = avalon.define({
                     $id: "topicList",
-
                     topicList: [],
 
-                    keyword: "",
-
-                    id:"",
-                    title: "",
-                    user: "",
-                    pub_date: "",
-                    last_replied: "",
-                    view_count: "",
-                    reply_count: "",
-                    hidden: false,
-                    closed: false,
-                    order: "",
+                    keyword: "",        
 
                     pager: {
                         getPage: function (page) {
@@ -29,23 +17,11 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                         }
                     },
 
-                    showEditProblemPage: function (problemId) {
-                        avalon.vmodels.admin.problemId = problemId;
+                    showEditTopicPage: function (topicId) {
+                        avalon.vmodels.admin.topicId = topicId;
                         avalon.vmodels.admin.template_url = "template/niji/edit_topic.html";
                     },
 
-                    editUser: function (user) {
-                        vm.username = user.username;
-                        vm.realName = user.real_name;
-                        vm.adminType = user.admin_type;
-                        vm.email = user.email;
-                        vm.userId = user.id;
-                        vm.tfa_auth = user.two_factor_auth;
-                        vm.openAPI = user.openapi_appkey ? true: false;
-                        vm.is_forbidden = user.is_forbidden ? true: false;
-
-                        vm.isEditing = true;
-                    },
                     search: function () {
                         getPage(1);
                         avalon.vmodels.userPager.currentPage = 1;

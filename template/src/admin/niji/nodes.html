@@ -25,8 +25,8 @@
             <td>{{ el.description}}</td>
             <td>{{ el.num_of_topics }}</td>
             <td>
-                <button class="btn-sm btn-info" ms-click="editNode(el)">编辑</button>
-                <a class="btn btn-primary" ms-attr-href="'/submissions/?user_id='+el.id" target="_blank">删除</a>
+                <button class="btn btn-info" ms-click="editNode(el)">编辑</button>
+                <button class="btn btn-danger" ms-click="delNode(el)">删除</button>
             </td>
         </tr>
         <tr>

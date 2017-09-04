@@ -1,5 +1,4 @@
 require(["jquery", "avalon", "csrfToken", "bsAlert", "pager"], function ($, avalon, csrfTokenHeader, bsAlert) {
-
     avalon.ready(function () {
         if(avalon.vmodels.problemList){
             vm = avalon.vmodels.problemList;

@@ -31,6 +31,31 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
 
                         vm.isEditing = true;
                     },
+                    delNode: function (node) {
+                        var data={
+                            id:node.id,
+                            title: node.title,
+                            description: node.description,
+                            dell: true,
+                        };
+                        if (confirm("你确定要删除么?")) {
+                            $.ajax({
+                                url: "/bbs/api/admin/node/",
+                                data: data,
+                                dataType: "json",
+                                method: "put",
+                                success: function (data) {
+                                    if (!data.code) {
+                                        bsAlert("删除成功！");
+                                        getPage(avalon.vmodels.userPager.currentPage);
+                                        vm.isEditing = false;
+                                    } else {
+                                        bsAlert(data.data);
+                                    }
+                                }
+                            });
+                        }
+                    },
                     addNode: function () {
                         vm.id = 0;
                         vm.title="";
@@ -43,7 +68,6 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                     }
                 });
             }
-
 
             function getPage(page) {
                 var url = "/bbs/api/admin/node/?paging=true&page=" + page + "&page_size=10";
@@ -66,6 +90,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                 });
             }
 
+
             $("#edit-node-form").validator()
                 .on('submit', function (e) {
                     if (!e.isDefaultPrevented()) {
@@ -73,6 +98,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                             id: vm.id,
                             title: vm.title,
                             description: vm.description,
+                            dell: false,
                         };
                         $.ajax({
                             url: "/bbs/api/admin/node/",

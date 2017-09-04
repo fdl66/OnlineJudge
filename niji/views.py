@@ -10,7 +10,7 @@ from django.views.generic import ListView
 from django.utils.translation import ugettext as _
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Topic, Node, Post, Notification, ForumAvatar
+from .models import Topic, Node, Post, Notification, ForumAvatar,Appendix
 from .forms import TopicForm, TopicEditForm, AppendixForm, ForumAvatarForm, ReplyForm
 from .misc import get_query
 import re
@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from account.decorators import admin_required
-from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer,PostSerializer
+from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer,PostSerializer,AppendixSerializer
 from utils.shortcuts import (serializer_invalid_response, error_response,
                              success_response, error_page, paginate, rand_str)
 from django.db.models import Q
@@ -375,13 +375,15 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("niji:index"))
 
 class NodeAdminAPIView(APIView):
-
     @admin_required
     def put(self, request):
         serializer = NodeSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.data
-            print data
+            if data["dell"]:
+                node=Node.objects.get(id=data["id"])
+                node.delete()
+                return success_response(u"删除成功")
             if data["id"] == 0:#添加
                 try:
                     node = Node.objects.get(title=data["title"])
@@ -418,6 +420,7 @@ class NodeAdminAPIView(APIView):
             topics = Topic.objects.filter(node=item)
             item.num_of_topics= "{}({})".format(topics.count(), topics.visible().count())
         return paginate(request, node , EditNodeSerializer)
+    
 
 
 class TopicAdminAPIView(APIView):
@@ -449,3 +452,11 @@ class PostAdminAPIView(APIView):
             posts = Post.objects.filter(topic=topic_id)
         return paginate(request,posts,PostSerializer)
 
+class AppendixAdminAPIView(APIView):
+    @admin_required
+    def get(self,request):
+        appendixs=Appendix.objects.all()
+        topic_id=request.GET.get("topic_id",None)
+        if topic_id:
+            appendixs = Appendix.objects.filter(topic=topic_id)
+        return paginate(request,appendixs,AppendixSerializer)

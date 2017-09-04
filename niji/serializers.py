@@ -1,6 +1,6 @@
 # coding=utf-8
 from rest_framework import serializers
-from niji.models import Topic, Post, Node
+from .models import Topic, Post, Node,Appendix
 from account.models import User
 class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(read_only=True)
@@ -20,6 +20,11 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         model = Post
         fields = ('content_raw', 'hidden','user_username')
 
+class AppendixSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Appendix
+        fields = ('content_raw','id')
+
 '''
 class NodeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,6 +36,7 @@ class NodeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField(max_length=30)
     description = serializers.CharField()
+    dell=serializers.BooleanField()
 
 class EditNodeSerializer(serializers.Serializer):
     id = serializers.IntegerField()

@@ -1,4 +1,4 @@
-<div ms-controller="edittopic" class="col-md-9">
+<div ms-controller="editTopic" class="col-md-9">
     <form id="edit-topic-form">
         <nav>
             <ul class="pager">
@@ -38,14 +38,14 @@
         </div>
         </div>
         </div>
-
-
+        
+        <div ms-visible="hasPost">
         <div class="row">
             <H3>回复</H3>
         </div>
         <div class="panel panel-default sample-panel">
         <div class="panel-body row">
-            <div class="row form-group col-md-12">
+            <div class="row col-md-12">
                 <div class="row right col-md-5">
                     <div class="right">
                             <input type="submit" value="搜索" class="btn btn-primary" ms-click="search()">
@@ -66,15 +66,15 @@
                         <td>{{ el.user_username }}</td>
                         <td>{{ el.content_raw}}</td>
                         <td>
-                            <button class="btn-sm btn-info" ms-click="editPost(el)">编辑</button>
-                            <a class="btn btn-primary" ms-attr-href="'/submissions/?user_id='+el.id" target="_blank">删除</a>
+                            <button class="btn btn-info" ms-click="editPost(el)">编辑</button>
+                            <button class="btn btn-danger" ms-click="delPost(el)">删除</button>
                         </td>
                     </tr>
                 </table>
                 <div class="text-right">
                     <ms:pager $id="userPager" config="pager"></ms:pager>
                 </div>
-                <div ms-visible="isEditing">
+                <div ms-visible="ispostEditing">
                     <form id="edit-post-form">
                         <div class="form-group col-md-3">
                             <label>回复处理</label><br>
@@ -101,36 +101,54 @@
             </div>
         </div>
         </div>
+        </div>
 
+        <div ms-visible="hasAppendix">
         <div class="row">
             <H3>帖子追加内容</H3>
         </div>
         <div class="panel panel-default sample-panel">
         <div class="panel-body row">
-            <div class="row form-group col-md-12">
-                <div class="row form-group col-md-12">
-                    <div class="form-group col-md-9">
-                        <textarea class="form-control" rows="6" name="input_description"
-                                  ms-duplex="inputDescription" data-error="请填写输入描述"
-                                  maxlength="10000" required></textarea>
-                        <div class="help-block with-errors"></div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <br>
-                        <label>&nbsp<input type="checkbox" ms-duplex-checked="visible">
-                            <small> 删除</small>
-                        </label>
-                    </div>
+            <div class="row col-md-12">
+                <table class="table table-striped">
+                    <tr>
+                        <th>内容</th>
+                        <th>设置</th>
+                    </tr>
+                    <tr ms-repeat="appendixs">
+                        <td>{{ el.content_raw}}</td>
+                        <td>
+                            <button class="btn btn-info" ms-click="editAppendix(el)">编辑</button>
+                            <button class="btn btn-danger" ms-click="delAppendix(el)">删除</button>
+                        </td>
+                    </tr>
+                </table>
+                <div ms-visible="isappendixEditing">
+                    <form id="edit-appendix-form">
+                        <div class="form-group col-md-12">
+                            <textarea class="form-control" rows="4" name="appendixs_content_raw"
+                                      ms-duplex="appendixs_content_raw" data-error="请填写输入描述"
+                                      maxlength="10000" required></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">保存</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
         </div>
-        
+        </div>
+
         <div class="col-md-12">
             <input type="submit" class="btn btn-success btn-lg" value="保存" id="submitBtn">
             <button herf="#" class="btn btn-danger btn-lg"  id="submitBtn">删除</button>
         </div>
     </form>
+
+
+
 </div>
 
 <script src="/static/js/app/admin/niji/edittopic.js"></script>

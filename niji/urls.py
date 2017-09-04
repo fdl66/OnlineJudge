@@ -36,5 +36,6 @@ urlpatterns = [
     url(r'^api/', include(api_router.urls)),
     url(r'^api/admin/topic/$',views.TopicAdminAPIView.as_view(),name='topic_admin_api'),
     url(r'^api/admin/post/$',views.PostAdminAPIView.as_view(),name='post_admin_api'),
+    url(r'^api/admin/appendix/$',views.AppendixAdminAPIView.as_view(),name='appendix_admin_api'),
     #url(r'^/admin/edittopic/$',name='admin_edit_topic'),
 ]
