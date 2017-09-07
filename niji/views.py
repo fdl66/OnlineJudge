@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from account.decorators import admin_required
-from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer,PostSerializer,AppendixSerializer
+from .serializers import  NodeSerializer,EditNodeSerializer,TopicSerializer,PostSerializer,AppendixSerializer,EditPostSerializer
 from utils.shortcuts import (serializer_invalid_response, error_response,
                              success_response, error_page, paginate, rand_str)
 from django.db.models import Q
@@ -380,7 +380,6 @@ class NodeAdminAPIView(APIView):
         serializer = NodeSerializer(data=request.data)
         if serializer.is_valid():
             data = serializer.data
-            print request.data["dell"]
             if str(request.data["dell"]) == '1':
                 node=Node.objects.get(id=data["id"])
                 node.delete()
@@ -426,6 +425,28 @@ class NodeAdminAPIView(APIView):
 
 class TopicAdminAPIView(APIView):
     @admin_required
+    def put(self, request):
+        serializer = TopicSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.data
+            if str(request.data["dell"]) == '1':
+                topic=Topic.objects.get(id=int(request.data['id']))
+                topic.delete()
+                return success_response(u"删除成功")
+            else :#修改
+                try:
+                    topic = Topic.objects.get(id=int(request.data['id']))
+                except Topic.DoesNotExist:
+                    return error_response(u"厉害了，没有这个id，sorry！")
+            topic.title = data["title"]
+            topic.hidden = data["hidden"]
+            topic.closed = data["closed"]
+            topic.content_raw = data["content_raw"]
+            topic.save()
+            return success_response(TopicSerializer(topic).data)
+        else :
+            return serializer_invalid_response(serializer)
+    @admin_required
     def get(self,request):
         topics = Topic.objects.all().order_by("order")
         keyword = request.GET.get("keyword", None)
@@ -446,6 +467,26 @@ class TopicAdminAPIView(APIView):
 
 class PostAdminAPIView(APIView):
     @admin_required
+    def put(self, request):
+        serializer = EditPostSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.data
+            if str(request.data["dell"]) == '1':
+                post=Post.objects.get(id=data["id"])
+                post.delete()
+                return success_response(u"删除成功")
+            else :#修改
+                try:
+                    post = Post.objects.get(id=data["id"])
+                except Post.DoesNotExist:
+                    return error_response(u"厉害了，没有这个id，sorry！")
+            post.hidden = data["hidden"]
+            post.content_raw = data["content_raw"]
+            post.save()
+            return success_response(PostSerializer(post).data)
+        else :
+            return serializer_invalid_response(serializer)
+    @admin_required
     def get(self,request):
         posts=Post.objects.all()
         topic_id=request.GET.get("topic_id",None)
@@ -454,6 +495,29 @@ class PostAdminAPIView(APIView):
         return paginate(request,posts,PostSerializer)
 
 class AppendixAdminAPIView(APIView):
+    @admin_required
+    def put(self, request):
+        serializer = AppendixSerializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.data
+            if str(request.data["dell"]) == '1':
+                try:
+                    appendix=Appendix.objects.get(id=int(request.data['id']))
+                    appendix.delete()
+                except Appendix.DoesNotExist:
+                    return error_response(u"厉害了，没有这个id，sorry！")
+                return success_response(u"删除成功")
+            else :#修改
+                try:
+                    appendix = Appendix.objects.get(id=int(request.data['id']))
+                except Appendix.DoesNotExist:
+                    return error_response(u"厉害了，没有这个id，sorry！")
+                    pass
+            appendix.content_raw = data["content_raw"]
+            appendix.save()
+            return success_response(PostSerializer(appendix).data)
+        else :
+            return serializer_invalid_response(serializer)
     @admin_required
     def get(self,request):
         appendixs=Appendix.objects.all()

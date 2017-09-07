@@ -50,8 +50,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "bootstrap"], function ($, 
             {
                 name: "论坛管理",
                 children: [{name: "话题编辑", hash: "#niji/nodes"},
-                    {name: "帖子管理", hash: "#niji/topics"},
-                    {name:"edit_topic", hash:"#niji/edit_topic"}]
+                    {name: "帖子管理", hash: "#niji/topics"}]
             }
         ];
 

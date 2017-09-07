@@ -14,10 +14,10 @@
         <div class="row form-group col-md-12">
             <div class="form-group col-md-3">
                 <label>管理</label><br>
-                <label><input type="checkbox" name="hidden">
+                <label><input name="hidden" type="checkbox" ms-duplex-checked="hidden">
                     <small> 隐藏&nbsp&nbsp&nbsp&nbsp</small>
                 </label>
-                <label><input type="checkbox" name="closed">
+                <label><input name="closed" type="checkbox" ms-duplex-checked="closed">
                     <small> 关闭</small>
                 </label>
                 <br><label>标题</label>
@@ -25,7 +25,7 @@
                        data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
                 <div class="help-block with-errors"></div>
                 <label>用户</label>
-                <input type="text" name="user_username" class="form-control" ms-duplex="user_username"
+                <input type="text" name="user_username" readonly class="form-control" ms-duplex="user_username"
                        data-error="用户名不能为空" maxlength="30" required>
                 <div class="help-block with-errors"></div>
             </div>
@@ -36,9 +36,13 @@
                 <div class="help-block with-errors"></div>
             </div>
         </div>
+        <div class="col-md-12 ">
+            <input type="submit" class="btn-lg btn-success" value="保存" id="submitBtn">
         </div>
         </div>
-        
+        </div>
+    </form>
+
         <div ms-visible="hasPost">
         <div class="row">
             <H3>回复</H3>
@@ -51,7 +55,7 @@
                             <input type="submit" value="搜索" class="btn btn-primary" ms-click="search()">
                     </div>
                     <div class="right col-md-9">
-                        <input name="keyword" class="form-control" placeholder="请输入关键词" ms-duplex="keyword">
+                        <input name="keyword" class="" placeholder="请输入关键词" ms-duplex="keyword">
                     </div>
                 </div>
                 <br>
@@ -71,9 +75,11 @@
                         </td>
                     </tr>
                 </table>
+                <!--
                 <div class="text-right">
                     <ms:pager $id="userPager" config="pager"></ms:pager>
                 </div>
+                -->
                 <div ms-visible="ispostEditing">
                     <form id="edit-post-form">
                         <div class="form-group col-md-3">
@@ -82,7 +88,7 @@
                                 <small> 隐藏&nbsp&nbsp&nbsp&nbsp</small>
                             </label>
                             <br><br><label>用户</label>
-                            <input type="text" name="posts_user_username"  class="form-control" ms-duplex="posts_user_username"
+                            <input type="text" name="posts_user_username"  class="form-control" readonly ms-duplex="posts_user_username"
                                    data-error="请填写题目名称(名称不能超过30个字)" maxlength="30" required>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -141,13 +147,10 @@
         </div>
         </div>
 
-        <div class="col-md-12">
-            <input type="submit" class="btn btn-success btn-lg" value="保存" id="submitBtn">
-            <button herf="#" class="btn btn-danger btn-lg"  id="submitBtn">删除</button>
+        <div class="right">
+            <br>
+            <button class="btn-lg btn-danger" ms-click="delTopic()">删了这个帖子</button>
         </div>
-    </form>
-
-
 
 </div>
 

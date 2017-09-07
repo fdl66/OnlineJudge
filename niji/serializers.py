@@ -18,7 +18,13 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     user_username = serializers.CharField(source='user.username',read_only=True)
     class Meta:
         model = Post
-        fields = ('content_raw', 'hidden','user_username')
+        fields = ('id','content_raw', 'hidden','user_username')
+
+class EditPostSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    content_raw = serializers.CharField()
+    hidden = serializers.BooleanField()
+    user_username=serializers.CharField(max_length=30)
 
 class AppendixSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
