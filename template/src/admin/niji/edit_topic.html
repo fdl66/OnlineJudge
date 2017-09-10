@@ -51,11 +51,11 @@
         <div class="panel-body row">
             <div class="row col-md-12">
                 <div class="row right col-md-5">
-                    <div class="right">
-                            <input type="submit" value="搜索" class="btn btn-primary" ms-click="search()">
-                    </div>
-                    <div class="right col-md-9">
-                        <input name="keyword" class="" placeholder="请输入关键词" ms-duplex="keyword">
+                <form class="form-inline" onsubmit="return false;">
+                    <div class="right form-group-sm">
+                        <input name="keyword" class="" placeholder="请输入关键词(内容)" ms-duplex="keyword">
+                        <input type="submit" value="搜索" class="btn btn-primary" ms-click="search()">
+                </form>
                     </div>
                 </div>
                 <br>

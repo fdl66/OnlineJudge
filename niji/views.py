@@ -490,8 +490,13 @@ class PostAdminAPIView(APIView):
     def get(self,request):
         posts=Post.objects.all()
         topic_id=request.GET.get("topic_id",None)
-        if topic_id:
-            posts = Post.objects.filter(topic=topic_id)
+        keyword = request.GET.get("keyword", None)
+        if keyword and topic_id:
+            posts = Post.objects.filter(Q(content_raw__contains=keyword),topic_id=topic_id)
+        elif topic_id:
+            posts = Post.objects.filter(topic_id=topic_id)
+        else :
+            return error_response("no this topic_id!")
         return paginate(request,posts,PostSerializer)
 
 class AppendixAdminAPIView(APIView):
