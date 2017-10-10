@@ -124,6 +124,7 @@ class SubmissionAPIView(APIView):
         response_data = {"result": submission.result}
         if submission.result == 0:
             response_data["accepted_answer_time"] = submission.accepted_answer_time
+            response_data["accepted_answer_info"] = submission.accepted_answer_info
         return success_response(response_data)
 
 

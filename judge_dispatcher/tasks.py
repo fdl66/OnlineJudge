@@ -87,6 +87,7 @@ class JudgeDispatcher(object):
                 self.submission.result = data["data"]["result"]
                 self.submission.info = json.dumps(data["data"]["info"])
                 self.submission.accepted_answer_time = data["data"]["accepted_answer_time"]
+                self.submission.accepted_answer_info = data["data"]["accepted_answer_info"]
         except Exception as e:
             self.submission.result = result["system_error"]
             self.submission.info = str(e) + " help: https://github.com/QingdaoU/OnlineJudge/wiki/FAQ"
@@ -94,7 +95,7 @@ class JudgeDispatcher(object):
             self.release_judge_instance(judge_server.id)
 
             self.submission.judge_end_time = int(time.time() * 1000)
-            self.submission.save(update_fields=["judge_start_time", "result", "info", "accepted_answer_time", "judge_end_time"])
+            self.submission.save(update_fields=["judge_start_time", "result", "info", "accepted_answer_time","accepted_answer_info","judge_end_time"])
 
         if self.submission.contest_id:
             self.update_contest_problem_status()

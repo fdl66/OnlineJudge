@@ -76,8 +76,14 @@ class JudgeInstanceRunner(object):
                                  test_case_dir=test_case_dir,
                                  judge_base_path=judge_base_path, spj_path=spj_path)
             judge_result = {"result": result["accepted"], "info": client.run(),
-                            "accepted_answer_time": None, "server": host_name}
-
+                            "accepted_answer_time": None,"accepted_answer_info":0, "server": host_name}
+            #结果处理
+            ac_test_case_num=0
+            all_test_case_num=len(judge_result["info"])
+            for item in judge_result["info"]:
+                if item["result"] == 0:
+                    ac_test_case_num+=1
+            judge_result["accepted_answer_info"] = 100.0*ac_test_case_num/all_test_case_num
             for item in judge_result["info"]:
                 if item["result"] != 0:
                     judge_result["result"] = item["result"]
