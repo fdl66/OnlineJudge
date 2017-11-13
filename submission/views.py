@@ -26,6 +26,11 @@ from .serializers import (CreateSubmissionSerializer, SubmissionSerializer,
                           CreateContestSubmissionSerializer, OpenAPICreateSubmissionSerializer,
                           OpenAPISubmissionSerializer)
 
+import datetime
+from collections import defaultdict
+from django.db import connection
+from django.db.models import Count
+
 logger = logging.getLogger("app_info")
 
 
@@ -237,6 +242,44 @@ class SubmissionAdminAPIView(APIView):
             return error_response(u"参数错误")
         submissions = Submission.objects.filter(problem_id=problem_id, contest_id__isnull=True).order_by("-create_time")
         return paginate(request, submissions, SubmissionSerializer)
+
+class Submission_NumAdminAPIView(APIView):
+    @super_admin_required
+    def get(self,request):
+        req_util = request.GET.get("req_util",None)
+        start_time = request.GET.get("start_time",None)
+        end_time = request.GET.get("end_time",None)
+        user_name = request.GET.get("user_name",None)
+        submission_num=[]
+        if not end_time:
+            end_time=datetime.datetime.now()
+        else:
+            end_time=datetime.datetime.strptime(end_time,'%Y-%m-%dT%H:%M')
+        if not start_time:
+            delta=datetime.timedelta(days=7)
+            start_time=end_time-delta
+        else:
+            start_time = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M')
+        if start_time>end_time :
+            start_time,end_time=end_time,start_time
+        user_after_time_filter=Submission.objects.filter(create_time__range=(start_time,end_time))
+        if user_name:
+            try:
+                user_id = User.objects.get(username=user_name).id
+            except User.DoesNotExist:
+                return error_response(u"用户不存在")
+            select={'day':connection.ops.date_trunc_sql('day','create_time')}
+            submission_num = list(user_after_time_filter.filter(user_id=user_id).extra(select=select).values('day').annotate(number=Count('id')).order_by('day'))
+        else :
+            select = {'day': connection.ops.date_trunc_sql('day', 'create_time')}
+            submission_num = list(user_after_time_filter.all().extra(select=select).values('day').annotate(number=Count('id')).order_by('day'))
+        x_data=[]
+        y_data=[]
+        for item in submission_num:
+            x_data.append(item['day'])
+            y_data.append(item['number'])
+        return success_response({"x_data":json.dumps(x_data),"y_data":json.dumps(y_data)})
+
 
 
 @login_required

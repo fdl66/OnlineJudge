@@ -79,6 +79,7 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "pager", "validator"],
                     dataType: "json",
                     method: "get",
                     success: function (data) {
+                        console.log(data);
                         if (!data.code) {
                             vm.nodeList = data.data.results;
                             avalon.vmodels.userPager.totalPage = data.data.total_page;

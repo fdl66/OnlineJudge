@@ -51,6 +51,10 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "bootstrap"], function ($, 
                 name: "论坛管理",
                 children: [{name: "话题编辑", hash: "#niji/nodes"},
                     {name: "帖子管理", hash: "#niji/topics"}]
+            },
+            {
+                name: "教工系统",
+                children: [{name: "提交统计", hash: "#sub_info/sub_info"}]
             }
         ];
 
