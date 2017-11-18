@@ -47,16 +47,13 @@ require(["jquery","csrfToken","bsAlert"],
         update_chart();
         $("button#update").click(function () {
             update_chart();
-            console.log("hello");
         });
         function update_chart() {
             myChart.showLoading();
             var req_util="day";
             var user_name=$("#user_name").val();
             var start_time=$("#time_start").val();
-            console.log(start_time);
             var end_time=$("#time_end").val();
-            console.log(end_time);
             var url = "/api/admin/submission_everyday_num/?req_util="+req_util;
             if(user_name){
                 url+="&user_name="+user_name;
@@ -85,8 +82,8 @@ require(["jquery","csrfToken","bsAlert"],
                         });
                     }
                     else {
+                        $("#user_name").val()="";
                         bsAlert(data.data);
-                        $("user_name").val()="";
                     }
                 }
             });

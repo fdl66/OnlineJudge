@@ -54,7 +54,8 @@ require(["jquery", "avalon", "csrfToken", "bsAlert", "bootstrap"], function ($, 
             },
             {
                 name: "教工系统",
-                children: [{name: "提交统计", hash: "#sub_info/sub_info"}]
+                children: [{name: "提交统计", hash: "#sub_info/sub_info"},
+                    {name: "提交查重",hash:"#sub_info/similarity"}]
             }
         ];
 

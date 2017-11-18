@@ -30,6 +30,9 @@ import datetime
 from collections import defaultdict
 from django.db import connection
 from django.db.models import Count
+import os
+import shutil
+import commands
 
 logger = logging.getLogger("app_info")
 
@@ -414,3 +417,49 @@ class SubmissionRejudgeAdminAPIView(APIView):
             return success_response(u"任务提交成功")
         else:
             return serializer_invalid_response(serializer)
+
+
+def submit_cache(username,problemid):
+    #mkdir
+    dirname="/tmp/"+username
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
+    else:
+        shutil.rmtree(dirname)
+        os.mkdir(dirname)
+    #get_submission
+    all_submission=Submission.objects.filter(problem_id=problemid).values("user_id","create_time","language","code")
+    #write_to_file
+    for one_submission in all_submission:
+        filename=str(one_submission["user_id"])+"_"+str(one_submission["create_time"])+"."+str(one_submission["language"])
+        code_file=open(dirname+"/"+filename,"w")
+        code_file.write(one_submission["code"])
+        code_file.close()
+    #carry_out_sim_c_c++_java -o out result_file
+    ans=""
+    for lang in [1,2,3]:
+        if lang == 1:
+            cmd="sim_c -r10 -p "+dirname+"/*.1"
+        elif lang == 2:
+            cmd = "sim_c++ -p "+dirname+"/*.2"
+        elif lang == 3:
+            cmd = "sim_java -p "+dirname+"/*.3"
+        status,output=commands.getstatusoutput(cmd)
+        if status == 0:
+            ans+=output
+        else :
+            ans += str(lang)+"sim carry out fail!\n"+output
+    #return
+    return ans
+
+class Submission_SimilarityAdminAPIView(APIView):
+    @super_admin_required
+    def get(self,request):
+        problem_id=request.GET.get("problem_id", None)
+        try:
+            Problem.objects.get(id=problem_id)
+        except Problem.DoesNotExist:
+            return error_response(u"题目不存在")
+        sim_info=submit_cache("sim_req",problem_id)
+        return success_response(sim_info)
+

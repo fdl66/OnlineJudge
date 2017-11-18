@@ -21,7 +21,7 @@ from group.views import (GroupAdminAPIView, GroupMemberAdminAPIView,
 from admin.views import AdminTemplateView
 
 from problem.views import TestCaseUploadAPIView, TestCaseDownloadAPIView, ProblemTagAdminAPIView, ProblemAdminAPIView, OpenAPIProblemAPI
-from submission.views import (SubmissionAPIView, SubmissionAdminAPIView,Submission_NumAdminAPIView, ContestSubmissionAPIView,
+from submission.views import (SubmissionAPIView, SubmissionAdminAPIView,Submission_NumAdminAPIView, Submission_SimilarityAdminAPIView,ContestSubmissionAPIView,
                               SubmissionShareAPIView, SubmissionRejudgeAdminAPIView, OpenAPISubmitCodeAPI)
 from judge_dispatcher.views import AdminJudgeServerAPIView
 from utils.views import SimditorImageUploadAPIView
@@ -75,6 +75,7 @@ urlpatterns = [
         name="join_group_request_admin_api"),
     url(r'^api/admin/submission/$', SubmissionAdminAPIView.as_view(), name="submission_admin_api_view"),
     url(r'^api/admin/submission_everyday_num/$', Submission_NumAdminAPIView.as_view(), name="submission_everyday_num_admin_api_view"),
+    url(r'^api/admin/submission_similarity/$', Submission_SimilarityAdminAPIView.as_view(),name="submission_similarity_admin_api_view"),
 
     url(r'^api/admin/judges/$', AdminJudgeServerAPIView.as_view(), name="judges_admin_api"),
 
