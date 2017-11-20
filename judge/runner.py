@@ -83,7 +83,10 @@ class JudgeInstanceRunner(object):
             for item in judge_result["info"]:
                 if item["result"] == 0:
                     ac_test_case_num+=1
-            judge_result["accepted_answer_info"] = 100.0*ac_test_case_num/all_test_case_num
+            if all_test_case_num == 0:
+                judge_result["accepted_answer_info"] = 0
+            else:
+                judge_result["accepted_answer_info"] = 100.0*ac_test_case_num/all_test_case_num
             for item in judge_result["info"]:
                 if item["result"] != 0:
                     judge_result["result"] = item["result"]

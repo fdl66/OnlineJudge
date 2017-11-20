@@ -181,7 +181,6 @@ def problem_my_submissions_list_page(request, problem_id):
     submissions = Submission.objects.filter(user_id=request.user.id, problem_id=problem.id, contest_id__isnull=True). \
         order_by("-create_time"). \
         values("id", "result", "create_time", "accepted_answer_time", "language")
-
     return render(request, "oj/submission/problem_my_submissions_list.html",
                   {"submissions": submissions, "problem": problem})
 
@@ -215,7 +214,8 @@ def my_submission(request, submission_id):
         submission = result["submission"]
     except Submission.DoesNotExist:
         return error_page(request, u"提交不存在")
-
+    show_score = settings.SHOW_SCORE
+    score=0.0
     try:
         if submission.contest_id:
             problem = ContestProblem.objects.get(id=submission.problem_id, visible=True)
@@ -226,15 +226,17 @@ def my_submission(request, submission_id):
 
     if submission.result in [judge_result["compile_error"], judge_result["system_error"], judge_result["waiting"]]:
         info = submission.info
+        show_score=False
     else:
+        score=submission.accepted_answer_info
         info = json.loads(submission.info)
         if "test_case" in info[0]:
             info = sorted(info, key=lambda x: x["test_case"])
 
     user = User.objects.get(id=submission.user_id)
     return render(request, "oj/submission/my_submission.html",
-                  {"submission": submission, "problem": problem, "info": info,
-                   "user": user, "can_share": result["can_share"], "website_base_url": settings.WEBSITE_INFO["url"]})
+                  {"submission": submission, "problem": problem, "info": info,"score":score,"show_score":show_score,
+                   "user": user, "can_share": result["can_share"], "website_base_url": settings.WEBSITE_INFO["url"],"show_score": settings.SHOW_SCORE})
 
 
 class SubmissionAdminAPIView(APIView):

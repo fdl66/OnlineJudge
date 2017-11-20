@@ -20,6 +20,8 @@ SMTP_CONFIG = {"smtp_server": "smtp.domain.com",
 # 是否显示所有人的提交, False就只显示自己的
 SHOW_ALL_SUBMISSIONS_LIST = False
 
+# 是否显示分数，通过样例数目
+SHOW_SCORE = True
 
 # please set your own SECRET_KEY to a long random string
 # SECRET_KEY = ""

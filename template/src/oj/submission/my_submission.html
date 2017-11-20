@@ -51,6 +51,9 @@
                 {% ifequal submission.result 4 %}
                     <pre>{{ submission.info }}</pre>
                 {% endifequal %}
+                {% if show_score %}
+                    <p>得分: {{ score }}</p>
+                {% endif %}
                 <p>提交时间: {{ submission.create_time }}</p>
             </div>
         </div>
