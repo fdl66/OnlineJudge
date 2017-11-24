@@ -59,9 +59,9 @@ pre, code {
     word-wrap: break-word;
 }
 
-.CodeMirror-code{
-    background-color: white;
-}
+/*.CodeMirror-code{*/
+    /*background-color: white;*/
+/*}*/
 
 .big-avatar{
     height: 200px;

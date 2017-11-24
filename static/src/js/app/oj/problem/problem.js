@@ -40,6 +40,26 @@ require(["jquery", "codeMirror", "csrfToken", "bsAlert", "ZeroClipboard"],
             var languageTypes = {"1": "text/x-csrc", "2": "text/x-c++src", "3": "text/x-java"};
             codeEditor.setOption("mode", languageTypes[language]);
         }
+        //选择theme
+        $('#select_theme').change(function(){
+          var theme = $('#select_theme').val();
+          codeEditor.setOption("theme", theme);
+        });
+        //选择editor
+        $('#select_editor').change(function(){
+          var keymap = $('#select_editor').val();
+          codeEditor.setOption("keyMap", keymap); //editor.setOption()为codeMirror提供的设置风格的方法
+          if(keymap=="vim"){
+            CodeMirror.commands.save = function(){ alert("Saving"); };
+          }
+          else if(keymap=="emacs"){
+            CodeMirror.commands.save = function() {
+              var elt = codeEditor.getWrapperElement();
+              elt.style.background = "#def";
+              setTimeout(function() { elt.style.background = ""; }, 300);
+            };
+          }
+        });
 
         function saveCode(code){
             localStorage.setItem(userId + ":" + location.href, JSON.stringify({code: code, language: language}))

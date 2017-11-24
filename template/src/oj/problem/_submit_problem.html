@@ -1,6 +1,7 @@
 <div>
-                <label>选择语言</label>
+
                 <div>
+                    <label>选择语言:</label>
                     <label class="radio-inline">
                         <input type="radio" name="language" value="1" checked> C (GCC 5.4)
                     </label>
@@ -10,10 +11,21 @@
                     <label class="radio-inline">
                         <input type="radio" name="language" value="3"> Java (Oracle JDK 1.8)
                     </label>
+                    <label class="problem-label">&nbsp&nbsp&nbsp&nbsp&nbsp主题:</label>
+                    <select id='select_theme'>
+                        <option selected>monokai</option>
+                        <option>default</option>
+                    </select>
+                    <label class="problem-label">&nbsp&nbsp&nbsp&nbsp&nbsp编辑器:</label>
+                    <select id='select_editor'>
+                        <option selected>sublime</option>
+                        <option>vim</option>
+                        <option>emacs</option>
+                    </select>
                 </div>
             </div>
             <div id="code-field">
-                <label class="problem-label">提交代码</label>
+
                 <textarea id="code-editor"></textarea>
             </div>
             <hr>

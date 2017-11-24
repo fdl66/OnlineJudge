@@ -42,6 +42,20 @@ var require = {
         //code mirror 代码编辑器 ->codeMirror
         _codeMirror: "lib/codeMirror/codemirror",
         codeMirrorClang: "lib/codeMirror/language/clike",
+        codeMirror_showhint: "lib/codeMirror/addon/hint/show-hint",
+        codeMirror_anywordhint: "lib/codeMirror/addon/hint/anyword-hint",
+        codeMirror_searchcursor: "lib/codeMirror/addon/search/searchcursor",
+        codeMirror_search: "lib/codeMirror/addon/search/search",
+        codeMirror_dialog: "lib/codeMirror/addon/dialog/dialog",
+        codeMirror_matchbrackets: "lib/codeMirror/addon/edit/matchbrackets",
+        codeMirror_closebrackets: "lib/codeMirror/addon/edit/closebrackets",
+        codeMirror_comment: "lib/codeMirror/addon/comment/comment",
+        codeMirror_hardwrap: "lib/codeMirror/addon/wrap/hardwrap",
+        codeMirror_foldcode: "lib/codeMirror/addon/fold/foldcode",
+        codeMirror_bracefold: "lib/codeMirror/addon/fold/brace-fold",
+        codeMirror_sublime: "lib/codeMirror/keymap/sublime",
+        codeMirror_vim: "lib/codeMirror/keymap/vim",
+        codeMirror_emacs: "lib/codeMirror/keymap/emacs",
 
         // bootstrap组件
         modal: "lib/bootstrap/modal",

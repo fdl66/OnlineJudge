@@ -9,6 +9,8 @@ template_release_path = "template/release/"
 
 static_src_path = "static/src/"
 static_release_path = "static/release/"
+niji_static_src_path = "niji/static/niji"
+niji_static_release_path = "static/release/niji"
 
 print "Begin to compress js"
 if os.system("nodejs static/src/js/r.js -o static/src/js/build.js"):
@@ -22,6 +24,7 @@ except Exception:
     pass
 # 复制一份模板文件夹到 release
 shutil.copytree(template_src_path, template_release_path)
+shutil.copytree(niji_static_src_path, niji_static_release_path)
 
 # 删除静态文件的 release 文件夹
 # shutil.rmtree(static_release_path)

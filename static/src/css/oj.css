@@ -3,6 +3,10 @@
 @import url("codeMirror/codemirror.css");
 @import url("global.css");
 @import url("contest/countdown.css");
+@import url("codeMirror/dialog.css");
+@import url("codeMirror/foldgutter.css");
+@import url("codeMirror/monokai.css");
+@import url("codeMirror/show-hint.css");
 
 #language-selector {
     width: 130px;
