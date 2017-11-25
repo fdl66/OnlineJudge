@@ -10,7 +10,7 @@ require(["jquery","csrfToken","bsAlert"],
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['最高气温']
+                        data:['提交次数']
                     },
                     toolbox: {
                         show: true,
@@ -37,7 +37,7 @@ require(["jquery","csrfToken","bsAlert"],
                     },
                     series: [
                         {
-                            name:'最低气温',
+                            name:'提交次数',
                             type:'line',
                             data:[]
                         }
@@ -57,6 +57,18 @@ require(["jquery","csrfToken","bsAlert"],
             var url = "/api/admin/submission_everyday_num/?req_util="+req_util;
             if(user_name){
                 url+="&user_name="+user_name;
+                myChart.setOption({
+                    title:{
+                        subtext:user_name
+                    }
+                });
+            }
+            else{
+                myChart.setOption({
+                    title:{
+                        subtext:"所有学生"
+                    }
+                });
             }
             if(start_time){
                 url+="&start_time="+start_time;

@@ -30,6 +30,8 @@ import datetime
 from collections import defaultdict
 from django.db import connection
 from django.db.models import Count
+from utils.shortcuts import rand_str
+from rest_framework.response import Response
 import os
 import shutil
 import commands
@@ -261,7 +263,7 @@ class Submission_NumAdminAPIView(APIView):
         else:
             end_time=datetime.datetime.strptime(end_time,'%Y-%m-%dT%H:%M')
         if not start_time:
-            delta=datetime.timedelta(days=7)
+            delta=datetime.timedelta(days=30)
             start_time=end_time-delta
         else:
             start_time = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M')
@@ -432,27 +434,75 @@ def submit_cache(username,problemid):
     #get_submission
     all_submission=Submission.objects.filter(problem_id=problemid).values("user_id","create_time","language","code")
     #write_to_file
+    language_dict={
+        1:".c",
+        2:".cpp",
+        3:".java"
+    }
     for one_submission in all_submission:
-        filename=str(one_submission["user_id"])+"_"+str(one_submission["create_time"])+"."+str(one_submission["language"])
+        filename=str(one_submission["user_id"])+"_"+str(one_submission["create_time"].strftime("%Y-%m-%dT%H:%M:%S.%f"))+str(language_dict[one_submission["language"]])
         code_file=open(dirname+"/"+filename,"w")
         code_file.write(one_submission["code"])
         code_file.close()
     #carry_out_sim_c_c++_java -o out result_file
-    ans=""
-    for lang in [1,2,3]:
+    ans={}
+    ans["code"] = 0
+    userlist={}
+    for lang in [1,2,3]:#three language submission carry out sim
         if lang == 1:
-            cmd="sim_c -r10 -p "+dirname+"/*.1"
+            cmd="sim_c -r10 -p "+dirname+"/*.c|grep 'consists'|cut -d' ' -f1,4,7 "
         elif lang == 2:
-            cmd = "sim_c++ -p "+dirname+"/*.2"
+            cmd = "sim_c++ -r10 -p "+dirname+"/*.cpp|grep 'consists'|cut -d' ' -f1,4,7 "
         elif lang == 3:
-            cmd = "sim_java -p "+dirname+"/*.3"
+            cmd = "sim_java -r10 -p "+dirname+"/*.java|grep 'consists'|cut -d' ' -f1,4,7 "
         status,output=commands.getstatusoutput(cmd)
-        if status == 0:
-            ans+=output
-        else :
-            ans += str(lang)+"sim carry out fail!\n"+output
-    #return
+        if status == 0:#sim carry out success
+            if output == "":#no similarity file
+                continue
+            else:
+                if "data" not in ans:
+                    ans["data"]=[]
+                for line in output.split("\n"):
+                    item = {}
+                    file1, item["similarity_percent"], file2 = line.split()[0], line.split()[1], line.split()[2]
+                    sub1 = {}
+                    sub2 = {}
+                    user_id1, sub_file1 = file1.split("/")[-1].split("_")[0], file1.split("/")[-1].split("_")[1]
+                    user_id2, sub_file2 = file2.split("/")[-1].split("_")[0], file2.split("/")[-1].split("_")[1]
+                    if user_id1 == user_id2:
+                        continue
+                    one_user = {}
+                    if str(user_id1) not in userlist:
+                        one_user_model1 = User.objects.get(id=user_id1)
+                        one_user={}
+                        one_user["username"], one_user["real_name"] = one_user_model1.username, one_user_model1.real_name
+                        userlist[str(user_id1)] = one_user
+                        print userlist
+                    if str(user_id2) not in userlist:
+                        one_user_model2 = User.objects.get(id=user_id2)
+                        one_user={}
+                        one_user["username"], one_user["real_name"] = one_user_model2.username, one_user_model2.real_name
+                        userlist[str(user_id2)] = one_user
+                        print userlist
+                    sub1["user"] = userlist[str(user_id1)]
+                    sub1["file"] = sub_file1
+                    sub2["user"] = userlist[str(user_id2)]
+                    sub2["file"] = sub_file2
+                    item["sub1"] = sub1
+                    item["sub2"] = sub2
+                    ans["data"].append(item)
+        else :#sim carry out fail
+            ans["code"]=2
+            ans["data"]= str(lang)+"sim carry out fail!\n"+output
+            break
+    print userlist
+    if "data" not in ans:
+        ans["code"]=1
+        ans["data"]="Wonderful! No similarity file!"
     return ans
+    #ans.code:{0:sim carry out success and have similarity file,
+    #          1:sim carry out success and no similarity file,
+    #          2:sim carry out fail!}
 
 class Submission_SimilarityAdminAPIView(APIView):
     @super_admin_required
@@ -462,6 +512,6 @@ class Submission_SimilarityAdminAPIView(APIView):
             Problem.objects.get(id=problem_id)
         except Problem.DoesNotExist:
             return error_response(u"题目不存在")
-        sim_info=submit_cache("sim_req",problem_id)
-        return success_response(sim_info)
+        sim_info=submit_cache(rand_str(15),problem_id)
+        return Response(data={"code": sim_info["code"], "data": sim_info["data"]})
 
