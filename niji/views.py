@@ -199,6 +199,8 @@ class SearchView(ListView):
 def search_redirect(request):
     if request.method == 'GET':
         keyword = request.GET.get('keyword')
+        if not keyword:
+            return HttpResponseRedirect(reverse('niji:index'))
         return HttpResponseRedirect(reverse('niji:search', kwargs={'keyword': keyword}))
     else:
         return HttpResponseForbidden('Post you cannot')
