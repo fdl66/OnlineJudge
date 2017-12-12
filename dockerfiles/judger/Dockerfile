@@ -23,7 +23,7 @@ RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
 		python-pip \
 		libtool \
 		libseccomp-dev' \
-    && apt-get -y install python gcc g++ python-pkg-resources $buildDeps\
+    && apt-get -y install python gcc g++ net-tools iputils-ping python-pkg-resources $buildDeps\
     && cd /opt \
     && tar -xzvf jdk-8u151-linux-x64.tar.gz \
     && rm jdk-8u151-linux-x64.tar.gz \

@@ -3,6 +3,7 @@ ENV PYTHONBUFFERED 1
 ADD . /code
 WORKDIR /code
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak \
+    && rm /code/dockerfiles/oj_web_server/jdk-8u151-linux-x64.tar.gz \
     && cp /code/dockerfiles/oj_web_server/sources.list /etc/apt/ \
     && mkdir -p /root/.pip/ \
     && cp /code/dockerfiles/oj_web_server/pip.conf /root/.pip/ \
